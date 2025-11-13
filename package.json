@@ -1,0 +1,15 @@
+{
+  "name": "food-tour",
+  "version": "0.1.0",
+  "description": "Small demo server for Food-Tour login",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.2",
+    "mysql2": "^3.3.0"
+  }
+}

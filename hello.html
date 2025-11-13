@@ -11,12 +11,56 @@
             color: #de0e0e;
             font-style: oblique;
         }
+        .lang-selector {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        .lang-btn {
+            padding: 0.4rem 0.8rem;
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .lang-btn.active {
+            background: var(--primary, #2b8a78);
+            color: white;
+            border-color: var(--primary, #2b8a78);
+        }
     </style>
+    <script src="i18n.js"></script>
 </head>
 <body>
+    <div class="lang-selector">
+        <button class="lang-btn active" onclick="setLanguage('it')">IT</button>
+        <button class="lang-btn" onclick="setLanguage('en')">EN</button>
+        <button class="lang-btn" onclick="setLanguage('es')">ES</button>
+        <button class="lang-btn" onclick="setLanguage('fr')">FR</button>
+        <button class="lang-btn" onclick="setLanguage('ja')">JA</button>
+    </div>
     <div class="container">
-        <h1 id="greeting">Hello, World!</h1>
-        <h2 id="explain">Ingrandisci</h2>
+        <div class="hero-card center" style="max-width:420px; margin:2rem auto;">
+            <h1 style="margin-bottom:1rem;" id="title">Accedi</h1>
+            <form id="auth-form">
+                <div style="margin-bottom:0.75rem;">
+                    <label for="email" id="email-label">Email</label><br />
+                    <input id="email" name="email" type="email" required style="width:100%; padding:0.6rem; border-radius:8px; border:1px solid rgba(0,0,0,0.08);" placeholder="user@example.com" />
+                </div>
+                <div style="margin-bottom:0.75rem;">
+                    <label for="password" id="password-label">Password</label><br />
+                    <input id="password" name="password" type="password" required style="width:100%; padding:0.6rem; border-radius:8px; border:1px solid rgba(0,0,0,0.08);" />
+                </div>
+                <div style="display:flex; gap:0.5rem;">
+                    <button id="login-btn" type="submit" class="btn">Accedi</button>
+                    <button id="signup-btn" type="button" class="btn secondary">Iscriviti</button>
+                </div>
+                <p id="message" style="color:var(--muted); margin-top:0.75rem;"></p>
+            </form>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>

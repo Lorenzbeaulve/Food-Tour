@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Login effettuato</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="container center" style="height:70vh;">
+        <div class="hero-card center" style="padding:2rem; max-width:520px;">
+            <h1>Login effettuato</h1>
+            <p style="margin-top:1rem;">Benvenuto! Tornerai alla pagina di login automaticamente tra 5 secondi.</p>
+            <p style="margin-top:1rem;"><a class="btn" href="hello.html">Torna al login</a></p>
+        </div>
+    </div>
+    <script>
+        setTimeout(()=>{ window.location.href = '/hello.html'; }, 5000);
+    </script>
+</body>
+</html>
