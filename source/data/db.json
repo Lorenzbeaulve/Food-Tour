@@ -1,0 +1,12 @@
+{
+  "users": [],
+  "restaurants": [],
+  "favorites": [],
+  "reviews": [],
+  "lastId": {
+    "users": 0,
+    "restaurants": 0,
+    "favorites": 0,
+    "reviews": 0
+  }
+}

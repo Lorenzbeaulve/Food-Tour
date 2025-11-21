@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
 
@@ -68,6 +69,19 @@ app.post('/api/login', async (req, res) => {
 });
 
 app.get('/health', (req, res) => res.json({ ok: true }));
+
+// Serve success.html with Google Maps API key injected
+app.get('/success.html', (req, res) => {
+    try{
+        let html = fs.readFileSync(path.join(__dirname, 'success.html'), 'utf8');
+        const apiKey = process.env.GOOGLE_MAPS_API_KEY || 'YOUR_GOOGLE_MAPS_API_KEY';
+        html = html.replace('YOUR_GOOGLE_MAPS_API_KEY', apiKey);
+        res.type('text/html').send(html);
+    }catch(err){
+        console.error('Error serving success.html', err);
+        res.status(500).json({ message: 'Error loading page' });
+    }
+});
 
 initDb().then(()=>{
     app.listen(PORT, () => console.log(`Server started on http://localhost:${PORT}`));

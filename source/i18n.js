@@ -132,6 +132,12 @@ function updateLanguageUI() {
         btn.classList.remove('active');
     });
     const lang = localStorage.getItem('lang') || detectLanguage();
+    // set html/body lang attributes to help browser translators
+    try{
+        if(document && document.documentElement) document.documentElement.lang = lang;
+        if(document && document.body) document.body.lang = lang;
+    }catch(e){/* ignore when not in browser */}
+
     const activeBtn = document.querySelector(`.lang-btn[onclick="setLanguage('${lang}')"]`);
     if (activeBtn) activeBtn.classList.add('active');
     

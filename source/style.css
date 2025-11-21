@@ -119,3 +119,26 @@ html, body {
         animation: none !important;
     }
 }
+
+/* Map & sidebar layout for success page */
+.map-layout{
+    display:flex;
+    gap:1rem;
+    padding-top:1rem;
+    height:85vh;
+    align-items:stretch;
+}
+
+#map-container{ flex:1; min-width:300px; height:100%; }
+#map{ width:100%; height:100%; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+
+#sidebar{ width:380px; max-width:45%; background:var(--surface); border-radius:8px; box-shadow:0 2px 12px rgba(0,0,0,0.08); padding:1rem; overflow:auto; }
+.sidebar-header{ display:flex; justify-content:space-between; align-items:center; }
+.btn.small{ padding:0.25rem 0.6rem; font-size:0.9rem; }
+.sidebar-content{ margin-top:0.5rem; }
+
+@media (max-width: 900px){
+    .map-layout{ flex-direction:column; height:auto; }
+    #sidebar{ width:100%; max-width:100%; }
+    #map{ height:60vh; }
+}
