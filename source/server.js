@@ -83,6 +83,43 @@ app.get('/success.html', (req, res) => {
     }
 });
 
+// Provide restaurants from DB or fallback mock data
+app.get('/api/restaurants', async (req, res) => {
+    try{
+        const [rows] = await pool.query(`SELECT id, name, description, address, open_time, close_time, images, lat, lng, category, rating, extra_info FROM restaurants`);
+        const mapped = rows.map(r => ({
+            id: r.id,
+            name: r.name,
+            description: r.description,
+            address: r.address,
+            open_time: r.open_time,
+            close_time: r.close_time,
+            images: (() => {
+                if(!r.images) return [];
+                try{ return typeof r.images === 'string' ? JSON.parse(r.images) : r.images; }catch(e){ return [] }
+            })(),
+            lat: r.lat,
+            lng: r.lng,
+            category: r.category,
+            rating: r.rating,
+            extra_info: r.extra_info
+        }));
+        return res.json(mapped);
+    }catch(err){
+        // If the restaurants table doesn't exist, return sensible mock data so the frontend still works
+        if(err && err.code === 'ER_NO_SUCH_TABLE'){
+            console.warn('restaurants table missing, returning mock data');
+            const mock = [
+                { id: 1, name: 'Ristorante La Baia', description: 'Cucina tipica locale con vista mare.', address: 'Via Marina, 1, Vico Equense', open_time: '12:00', close_time: '23:00', images: ['https://picsum.photos/seed/1/800/600'], lat: 40.6135, lng: 14.4031, category: 'Ristorante di pesce', rating: 4.6, extra_info: '' },
+                { id: 2, name: 'Pizzeria da Gino', description: 'Pizza a legna tradizionale.', address: 'Piazza XX Settembre, 5, Vico Equense', open_time: '11:30', close_time: '23:30', images: ['https://picsum.photos/seed/2/800/600'], lat: 40.6120, lng: 14.4050, category: 'Pizzeria', rating: 4.3, extra_info: '' }
+            ];
+            return res.json(mock);
+        }
+        console.error('Error fetching restaurants', err);
+        return res.status(500).json({ message: 'Errore fetching restaurants' });
+    }
+});
+
 initDb().then(()=>{
     app.listen(PORT, () => console.log(`Server started on http://localhost:${PORT}`));
 }).catch(err=>{

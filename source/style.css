@@ -142,3 +142,23 @@ html, body {
     #sidebar{ width:100%; max-width:100%; }
     #map{ height:60vh; }
 }
+
+/* Map controls */
+#map-footer{
+    display:flex;
+    gap:1rem;
+    align-items:center;
+    background: var(--surface);
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    margin-top: 1rem;
+    justify-content: center;
+}
+.map-control-btn{ background: var(--primary); color: #fff; border-radius:6px; padding:0.6rem 1rem; border:none; cursor:pointer; font-weight:700; }
+.map-toggle{ font-size:0.95rem; color:var(--muted); display:inline-flex; align-items:center; gap:0.4rem; }
+
+
+.gallery-mini{ display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.6rem; }
+.gallery-mini .mini-img{ width:120px; height:80px; object-fit:cover; border-radius:6px; cursor:pointer; }
+.meta{ margin-top:0.6rem; color:var(--muted); }

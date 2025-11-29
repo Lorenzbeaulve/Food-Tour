@@ -51,3 +51,4 @@ Funzionamento:
 - `Iscriviti` invia `POST /api/signup` e salva l'email (hash della password) nel DB.
 - `Accedi` invia `POST /api/login`; se le credenziali sono corrette viene aperta `success.html` e dopo 3s si torna al login.
 
+Per ora per vedere i vari html vai in source e clica su di loro
