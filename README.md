@@ -37,8 +37,8 @@ CREATE DATABASE IF NOT EXISTS foodtour CHARACTER SET utf8mb4 COLLATE utf8mb4_uni
 4. Avvia il server:
 
 ```powershell
-npm start
-# il server ascolta su http://localhost:3000 per default
+npm start  npx http-server -c-1
+# il server ascolta su http://localhost:3000 per default entrambi validi
 ```
 
 5. Apri il login nel browser:
