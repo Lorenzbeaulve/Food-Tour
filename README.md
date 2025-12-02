@@ -3,11 +3,11 @@ Tech Web Project
 
 
 
-App to permit Turrist To Orient Them Self Around The Town of Vico Equense 
+FoodTour is an application designed to permit tourists find the right gastronomic experience for them.
 
-Uses The API of Google Maps And Translate to interface with the user with a map to follow destination and translate so that the Turist Understand no matter the languege
+The app uses Leaflet to display an interactive map and includes a built-in multilingual translation system, ensuring that users can understand the interface regardless of their native language.
 
-Development wise we will use javascript/html/css front-end and Node JS/ also javascript back-end
+From a technical perspective, the project uses HTML, CSS, and JavaScript for the front-end, while the back-end is built with Node.js and a MySQL database to manage users, favorites, and recent activity.
 
 ---
 

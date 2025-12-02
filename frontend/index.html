@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FoodTour - Login</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/translate.js"></script>
+</head>
+
+<body>
+    <!-- SELETTORE LINGUA -->
+    <div class="lang-selector">
+        <button class="lang-btn active" onclick="setLanguage('it')">IT</button>
+        <button class="lang-btn" onclick="setLanguage('en')">EN</button>
+        <button class="lang-btn" onclick="setLanguage('es')">ES</button>
+        <button class="lang-btn" onclick="setLanguage('fr')">FR</button>
+        <button class="lang-btn" onclick="setLanguage('ja')">JA</button>
+    </div>
+
+    <!-- CONTENITORE LOGIN -->
+    <div class="login-container">
+        <img src="assets/logo.png" class="logo" alt="FoodTour Logo">
+        <form action="success.html" method="GET">
+            <label for="email" id="email-label"></label>
+            <input id="email" type="email" required>
+
+            <label for="password" id="password-label"></label>
+            <input id="password" type="password" required>
+
+            <button id="login-btn" type="submit"></button>
+            <button id="signup-btn" type="button" class="secondary"></button>
+        </form>
+    </div>
+
+</body>
+</html>
