@@ -7,11 +7,6 @@ const translations = {
 };
 
     // index.html
-translations.en["title"] = "Login";
-translations.es["title"] = "Iniciar sesión";
-translations.fr["title"] = "Connexion";
-translations.ja["title"] = "ログイン";
-
 translations.it["email-label"] = "Email";
 translations.en["email-label"] = "Email";
 translations.es["email-label"] = "Correo electrónico";
@@ -35,6 +30,18 @@ translations.en["signup-btn"] = "Sign up";
 translations.es["signup-btn"] = "Registrarse";
 translations.fr["signup-btn"] = "S'inscrire";
 translations.ja["signup-btn"] = "登録";
+
+translations.it["name-label"] = "Nome";
+translations.en["name-label"] = "Name";
+translations.es["name-label"] = "Nombre";
+translations.fr["name-label"] = "Nom";
+translations.ja["name-label"] = "名前";
+
+translations.it["surname-label"] = "Cognome";
+translations.en["surname-label"] = "Surname";
+translations.es["surname-label"] = "Apellido";
+translations.fr["surname-label"] = "Prénom";
+translations.ja["surname-label"] = "苗字";
 
 // success.html
 translations.it["sidebar-title"] = "Dettagli ristorante";
