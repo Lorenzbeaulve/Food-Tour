@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>FoodTour - Login</title>
+    <title>FoodTour - Signup</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="js/translate.js"></script>
 </head>
@@ -23,16 +23,23 @@
     <div class="login-container">
         <img src="assets/logo.png" class="logo" alt="FoodTour Logo">
         <form action="success.html" method="GET">
+
+            <label for="name" id="name-label"></label>
+            <input id="name" type="text" required>
+
+            <label for="surname" id="surname-label"></label>
+            <input id="surname" type="text" required>
+
             <label for="email" id="email-label"></label>
             <input id="email" type="email" required>
 
             <label for="password" id="password-label"></label>
             <input id="password" type="password" required>
 
-            <button id="login-btn" type="submit"></button>
+            <button id="signup-btn" type="submit"></button>
             
         </form>
-        <button id="signup-btn" type="button" class="secondary" onclick="window.location.href='signup.html'"></button>
+        <button id="login-btn" type="button" class="secondary" onclick="window.location.href='index.html'"></button>
     </div>
 
 </body>
