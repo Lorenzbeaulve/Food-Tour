@@ -312,3 +312,13 @@ button:hover { /* mouse hover */
 .edit-actions .btn {
     width: auto;
 }
+
+/* form error messages */
+.form-error{
+    color: #b91c1c;
+    background: rgba(185,28,28,0.06);
+    padding: 0.5rem 0.6rem;
+    border-radius: 6px;
+    margin-bottom: 0.6rem;
+    display: none;
+}

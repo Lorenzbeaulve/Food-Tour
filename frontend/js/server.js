@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 
-let pool = require("./conn");
+let pool = require("./Connection");
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -28,47 +28,116 @@ app.post('/query', async (req, res) => {
     }
 });
 
+// Ensure password column can hold hashed passwords
+async function ensurePasswordColumn() {
+    try{
+        // get current database name
+        const [[{ dbName }]] = await pool.query('SELECT DATABASE() AS dbName');
+        const [cols] = await pool.query(
+            `SELECT CHARACTER_MAXIMUM_LENGTH FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'user' AND COLUMN_NAME = 'password'`,
+            [dbName]
+        );
+        if(!cols || cols.length === 0){
+            console.warn('Column `password` not found in table `user` (skipping migration)');
+            return;
+        }
+        const len = cols[0].CHARACTER_MAXIMUM_LENGTH || 0;
+        if(len < 100){
+            console.log('Altering `user.password` to VARCHAR(255) to store hashed passwords...');
+            await pool.query("ALTER TABLE `user` MODIFY COLUMN `password` VARCHAR(255) NOT NULL");
+            console.log('Migration applied: password column resized to VARCHAR(255)');
+        } else {
+            console.log('Password column length is sufficient:', len);
+        }
+    }catch(err){
+        console.warn('Could not ensure password column size:', err.message || err);
+    }
+}
+
 app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body || {};
+    if (!email || !password) return res.status(400).json({ success: false, msg: 'Email e password richieste' });
 
     try {
-        const query = "SELECT username, password FROM utenti WHERE username = ?";
-        const [rows] = await pool.execute(query, [username]);
+        // Try to find user in `user` table
+        const query = "SELECT email, password, Nome, Cognome FROM `user` WHERE email = ?";
+        const [rows] = await pool.execute(query, [email]);
 
-        if (rows.length === 0) {
-            return res.status(401).json({ success: false, msg: "Username o password errati" });
+        console.log('[LOGIN] attempt for email:', email);
+        console.log('[LOGIN] query returned rows:', Array.isArray(rows) ? rows.length : typeof rows);
+
+        if (!rows || rows.length === 0) {
+            console.log('[LOGIN] no user found for', email);
+            return res.status(401).json({ success: false, msg: "Email o password errati" });
         }
 
         const user = rows[0];
+        const stored = user.password || '';
+        console.log('[LOGIN] user record fetched. password type:', typeof stored, 'length:', stored.length);
 
-        const match = await bcrypt.compare(password, user.password);
+        let match = false;
+        // If the stored password looks like a bcrypt hash (starts with $2), use bcrypt.compare
+        if (typeof stored === 'string' && stored.startsWith('$2')) {
+            try {
+                match = await bcrypt.compare(password, stored);
+            } catch (compareErr) {
+                console.error('[LOGIN] bcrypt.compare error for', email, compareErr && compareErr.message ? compareErr.message : compareErr);
+                return res.status(500).json({ success: false, msg: 'Errore interno confronto password', error: compareErr && compareErr.message });
+            }
+        } else {
+            // Fallback: stored password is likely plaintext or non-bcrypt; compare directly
+            try {
+                match = password === stored;
+            } catch (plainErr) {
+                console.error('[LOGIN] plaintext compare error for', email, plainErr && plainErr.message ? plainErr.message : plainErr);
+                match = false;
+            }
 
-        if (!match) {
-            console.log("Passwords don't match");
-            return res.status(401).json({ success: false, msg: "Username o password errati" });
+            // If plaintext matched, migrate to a bcrypt hash for future logins
+            if (match) {
+                try {
+                    const newHash = await bcrypt.hash(password, 10);
+                    await pool.execute("UPDATE `user` SET password = ? WHERE email = ?", [newHash, email]);
+                    console.log('[LOGIN] migrated plaintext password to bcrypt for', email);
+                } catch (migrateErr) {
+                    console.warn('[LOGIN] failed to migrate password for', email, migrateErr && migrateErr.message ? migrateErr.message : migrateErr);
+                }
+            }
         }
 
-        res.json({ success: true, username: user.username });
-        console.log("Successfully logged in");
+        console.log('[LOGIN] password match:', match);
+        if (!match) {
+            return res.status(401).json({ success: false, msg: 'Email o password errati' });
+        }
+
+        return res.json({ success: true, email: user.email, nome: user.Nome, cognome: user.Cognome });
     } catch (err) {
-        res.status(500).json({ success: false, error: err.message });
+        console.error('Login error', err);
+        return res.status(500).json({ success: false, error: err.message });
     }
 });
 
 app.post('/register', async (req, res) => {
-    const { username, email, password } = req.body;
+    const { email, password, nome, cognome } = req.body || {};
+    if (!email || !password) return res.status(400).json({ success: false, msg: 'Email e password richieste' });
 
     try{
-        const pswd = await bcrypt.hash(password, 10);
-        const query = "INSERT INTO utenti (username, email , password) VALUES (?, ?, ?)";
-        await pool.execute(query, [username, email, pswd]);
-        console.log("success");
-        res.json({success: true, msg: 'successfully registered'});
+        const hashed = await bcrypt.hash(password, 10);
+        const query = "INSERT INTO `user` (email, password, Nome, Cognome) VALUES (?, ?, ?, ?)";
+        await pool.execute(query, [email, hashed, nome || null, cognome || null]);
+        return res.json({ success: true, msg: 'Registrazione avvenuta con successo' });
     }
     catch (err) {
-        console.log(err.message);
-        res.status(500).json({ success: false, error: err.message });
+        console.error('Register error', err.message);
+        if (err && err.code === 'ER_DUP_ENTRY') return res.status(409).json({ success: false, msg: 'Email già registrata' });
+        return res.status(500).json({ success: false, error: err.message });
     }
-})
+});
 
-app.listen(3000, () => console.log('Server in ascolto su http://localhost:3000'));
+// Run migration and start server
+ensurePasswordColumn().then(()=>{
+    app.listen(3000, () => console.log('Server in ascolto su http://localhost:3000'));
+}).catch(err=>{
+    console.error('Failed to run migrations', err);
+    app.listen(3000, () => console.log('Server in ascolto su http://localhost:3000 (migrations failed)'));
+});

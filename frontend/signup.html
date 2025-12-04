@@ -7,6 +7,7 @@
     <title>FoodTour - Signup</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="js/translate.js"></script>
+    <script src="js/auth.js" defer></script>
 </head>
 
 <body>
@@ -22,7 +23,7 @@
     <!-- CONTENITORE LOGIN -->
     <div class="login-container">
         <img src="assets/logo.png" class="logo" alt="FoodTour Logo">
-        <form action="success.html" method="GET">
+        <form id="signup-form">
 
             <label for="name" id="name-label"></label>
             <input id="name" type="text" required>
@@ -35,6 +36,7 @@
 
             <label for="password" id="password-label"></label>
             <input id="password" type="password" required>
+            <div id="signup-error" class="form-error" aria-live="polite"></div>
 
             <button id="signup-btn" type="submit"></button>
             
