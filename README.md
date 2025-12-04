@@ -53,5 +53,6 @@ Funzionamento:
 
 email di prova:anna.verdi@example.com
 password di prova:qwerty99
-
+start web page:npx http-server -c-1
+start DB Server:node js/server.js
 Per ora per vedere i vari html vai in source e clica su di loro
