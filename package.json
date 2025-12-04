@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "mysql2-promise": "^0.1.4"
+  }
+}
