@@ -134,6 +134,69 @@ app.post('/register', async (req, res) => {
     }
 });
 
+// Update user profile
+app.post('/update', async (req, res) => {
+    const { email, nome, cognome, password } = req.body || {};
+    if (!email) return res.status(400).json({ success: false, msg: 'Email richiesta' });
+
+    try {
+        let query = 'UPDATE `user` SET Nome = ?, Cognome = ?';
+        let params = [nome || "No name", cognome || "No surname", email];
+        
+        // If password is provided, hash and update it
+        if (password) {
+            const hashed = await bcrypt.hash(password, 10);
+            query = 'UPDATE `user` SET Nome = ?, Cognome = ?, password = ? WHERE email = ?';
+            params = [nome || "No name", cognome || "No name", hashed, email];
+        } else {
+            query += ' WHERE email = ?';
+        }
+
+        await pool.execute(query, params);
+        return res.json({ success: true, msg: 'Profilo aggiornato con successo' });
+    } catch (err) {
+        console.error('Update error', err.message);
+        return res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// Delete user account
+app.post('/delete', async (req, res) => {
+    const { email, password } = req.body || {};
+    if (!email || !password) return res.status(400).json({ success: false, msg: 'Email e password richieste' });
+
+    try {
+        // First verify the password
+        const query = "SELECT email, password FROM `user` WHERE email = ?";
+        const [rows] = await pool.execute(query, [email]);
+
+        if (!rows || rows.length === 0) {
+            return res.status(401).json({ success: false, msg: "Utente non trovato" });
+        }
+
+        const user = rows[0];
+        const stored = user.password || '';
+        let match = false;
+
+        if (typeof stored === 'string' && stored.startsWith('$2')) {
+            match = await bcrypt.compare(password, stored);
+        } else {
+            match = password === stored;
+        }
+
+        if (!match) {
+            return res.status(401).json({ success: false, msg: 'Password non corretta' });
+        }
+
+        // Delete the user
+        await pool.execute("DELETE FROM `user` WHERE email = ?", [email]);
+        return res.json({ success: true, msg: 'Account eliminato con successo' });
+    } catch (err) {
+        console.error('Delete error', err.message);
+        return res.status(500).json({ success: false, error: err.message });
+    }
+});
+
 // Run migration and start server
 ensurePasswordColumn().then(()=>{
     app.listen(3000, () => console.log('Server in ascolto su http://localhost:3000'));

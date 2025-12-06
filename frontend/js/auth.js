@@ -21,6 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 const data = await res.json();
                 if (res.ok && data && data.success) {
+                    // Store user data in localStorage for use in profile and other pages
+                    localStorage.setItem('user', JSON.stringify({
+                        email: data.email,
+                        nome: data.nome,
+                        cognome: data.cognome
+                    }));
                     // redirect to success page
                     window.location.href = 'success.html';
                 } else if (data && data.msg) {

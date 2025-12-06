@@ -50,6 +50,8 @@ http://localhost:3000/hello.html
 Funzionamento:
 - `Iscriviti` invia `POST /api/signup` e salva l'email (hash della password) nel DB.
 - `Accedi` invia `POST /api/login`; se le credenziali sono corrette viene aperta `success.html` e dopo 3s si torna al login.
+- `Modifica profilo` invia `POST /update` per aggiornare i dati della tupla che poi vengono visualizati sul sito dal LocalStorage(Json)
+- `Elimina profilo` invia `POST /delete` per cancellare la tupla dal DB
 
 email di prova:anna.verdi@example.com
 password di prova:qwerty99
