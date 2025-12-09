@@ -322,3 +322,69 @@ button:hover { /* mouse hover */
     margin-bottom: 0.6rem;
     display: none;
 }
+
+/* Favorites list styles */
+#favorites-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 1.5rem;
+}
+
+#favorites-empty {
+    color: #666;
+    padding: 0.8rem 0;
+}
+
+.favorite-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.8rem 0.6rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.favorite-info {
+    flex: 1;
+    text-align: left;
+}
+
+.favorite-title {
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.favorite-desc {
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.icon-btn {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: none;
+    background: #f3f3f3;
+    cursor: pointer;
+}
+
+.trash-btn {
+    background: #fff5f5;
+    color: #b91c1c;
+}
+
+.trash-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* small responsive tweaks for favorites */
+@media (max-width: 480px) {
+    .favorite-item { gap: 0.6rem; }
+    .favorite-title { font-size: 0.98rem; }
+    .favorite-desc { font-size: 0.9rem; }
+}
+

@@ -204,3 +204,40 @@ ensurePasswordColumn().then(()=>{
     console.error('Failed to run migrations', err);
     app.listen(3000, () => console.log('Server in ascolto su http://localhost:3000 (migrations failed)'));
 });
+
+// Fetch favorites for a user (Preferito = 'V')
+app.post('/favorites', async (req, res) => {
+    const { email } = req.body || {};
+    if (!email) return res.status(400).json({ success: false, msg: 'Email richiesta' });
+
+    try {
+        console.log('[FAVORITES] fetch for', email);
+        const query = `SELECT r.Name, r.Description, r.Location, r.Tipologia, r.OpeningAndClosingTime
+                       FROM Restaurant r
+                       JOIN user_Prefere_A_Restaurant u ON u.Restaurant_Name = r.Name
+                       WHERE u.user_email = ? AND u.Preferito = 'V'`;
+        const [rows] = await pool.execute(query, [email]);
+        console.log('[FAVORITES] returned', Array.isArray(rows) ? rows.length : typeof rows, 'rows');
+        return res.json({ success: true, favorites: rows });
+    } catch (err) {
+        console.error('Favorites fetch error', err && err.message ? err.message : err);
+        return res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// Remove a favorite (set Preferito = 'F')
+app.post('/favorites/remove', async (req, res) => {
+    const { email, restaurant } = req.body || {};
+    if (!email || !restaurant) return res.status(400).json({ success: false, msg: 'Email e restaurant richiesti' });
+
+    try {
+        console.log('[FAVORITES] remove request:', { email, restaurant });
+        const query = "UPDATE user_Prefere_A_Restaurant SET Preferito = 'F' WHERE user_email = ? AND Restaurant_Name = ?";
+        const [result] = await pool.execute(query, [email, restaurant]);
+        console.log('[FAVORITES] remove affectedRows:', result && result.affectedRows);
+        return res.json({ success: true, affectedRows: result.affectedRows });
+    } catch (err) {
+        console.error('Favorites remove error', err && err.message ? err.message : err);
+        return res.status(500).json({ success: false, error: err.message });
+    }
+});
