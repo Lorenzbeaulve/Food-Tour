@@ -28,23 +28,23 @@ copy .env.example .env
 # poi apri .env e imposta DB_USER, DB_PASSWORD e DB_NAME
 ```
 
-3. Crea il database MySQL (se non esiste). Esempio SQL da eseguire in MySQL/MariaDB:
+3. Crea il database MySQL (se non esiste):
 
 ```sql
-CREATE DATABASE IF NOT EXISTS foodtour CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS FoodTour CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 4. Avvia il server:
 
 ```powershell
-npm start  npx http-server -c-1
+npx http-server -c -1
 # il server ascolta su http://localhost:3000 per default entrambi validi
 ```
 
 5. Apri il login nel browser:
 
 ```
-http://localhost:3000/hello.html
+http://localhost:8080/source
 ```
 
 Funzionamento:
@@ -53,8 +53,8 @@ Funzionamento:
 - `Modifica profilo` invia `POST /update` per aggiornare i dati della tupla che poi vengono visualizati sul sito dal LocalStorage(Json)
 - `Elimina profilo` invia `POST /delete` per cancellare la tupla dal DB
 
-email di prova:anna.verdi@example.com
-password di prova:qwerty99
-start web page:npx http-server -c-1
-start DB Server:node js/server.js
-Per ora per vedere i vari html vai in source e clica su di loro
+email di prova: anna.verdi@example.com
+password di prova: qwerty99
+start web page: npx http-server -c -1
+start db server: node source/js/server.js
+
