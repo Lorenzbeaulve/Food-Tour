@@ -388,3 +388,26 @@ button:hover { /* mouse hover */
     .favorite-desc { font-size: 0.9rem; }
 }
 
+/* button preferiti */
+.favorite-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor:pointer;
+    background-color: #f9b061;
+}
+
+.favorite-btn:active {
+    background-color: #e6782f;
+}
+
+.favorite-btn img {
+    width: 35px;
+    height: auto;
+}
+
+.favorite-btn:active img {
+    transform: scale(1.2);
+}
