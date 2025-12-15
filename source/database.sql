@@ -16,7 +16,9 @@ CREATE TABLE Restaurant (
     Description VARCHAR(200),
     Location VARCHAR(60),
     Tipologia VARCHAR(35),
-    OpeningAndClosingTime VARCHAR(30)
+    OpeningAndClosingTime VARCHAR(30),
+    Latitude DECIMAL(9,6),
+    Longitude DECIMAL(9,6)
 );
 
 -- ================================================
@@ -70,34 +72,34 @@ VALUES
 -- ================================================
 -- INSERIMENTO RISTORANTI
 -- ================================================
-INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime)
+INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime, Latitude, Longitude)
 VALUES
-('Pizzeria Cardone', 'Pizza, rosticceria e focaccia in un ristorante self-service con sede in un ex fattoria.\n Tra le pizze più particolari ci sono consigliate zucchine pancetta e provola e alla diavola', 'Via le Pietre, 13, 80069 Vico Equense NA','Pizzeria','18:00-00:00');
+('Pizzeria Cardone', 'Pizza, rosticceria e focaccia in un ristorante self-service con sede in un ex fattoria.\n Tra le pizze più particolari ci sono consigliate zucchine pancetta e provola e alla diavola', 'Via le Pietre, 13, 80069 Vico Equense NA','Pizzeria','18:00-00:00', 40.6599, 14.4338);
 
-INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime)
+INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime, Latitude, Longitude)
 VALUES
-('Gelateria Gabriele', 'Leccornie artigianali, come gelati e semifreddi, e liquori in locale curato con banco dei formaggi e salumi.', 'Corso Umberto I°, 8, 80069 Vico Equense NA','Gelateria','08:30-14:00  16:00-00:00');
+('Gelateria Gabriele', 'Leccornie artigianali, come gelati e semifreddi, e liquori in locale curato con banco dei formaggi e salumi.', 'Corso Umberto I°, 8, 80069 Vico Equense NA','Gelateria','08:30-14:00  16:00-00:00', 40.6611, 14.4325);
 
-INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime)
+INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime, Latitude, Longitude)
 VALUES
-('Pizzeria da Franco', 'Specialità di Salumi, vini e pizze da asporto incentrato sul farti provare i sapori tipici della Salumeria Vicana.\n Aperto fino a tarda notte ', 'Corso Filangieri, 94, 80069 Vico Equense NA','Salumeria','08:00-02:00');
+('Pizzeria da Franco', 'Specialità di Salumi, vini e pizze da asporto incentrato sul farti provare i sapori tipici della Salumeria Vicana.\n Aperto fino a tarda notte ', 'Corso Filangieri, 94, 80069 Vico Equense NA','Salumeria','08:00-02:00', 40.6606, 14.4342);
 
-INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime)
+INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime, Latitude, Longitude)
 VALUES
-('Rosticceria del Corso', 'Rosticeria con limitati posti a sedere ma rapida consegna al banco utile quando vuoi mangiare qualcosa di buono al volo. Chiuso di Lunedì', 'Via, Corso Filangieri, 87, 80069 Vico Equense NA', 'Rosticeria', '10:30-14:30 17-00');
+('Rosticceria del Corso', 'Rosticeria con limitati posti a sedere ma rapida consegna al banco utile quando vuoi mangiare qualcosa di buono al volo. Chiuso di Lunedì', 'Via, Corso Filangieri, 87, 80069 Vico Equense NA', 'Rosticeria', '10:30-14:30 17-00', 40.6604, 14.4340);
 
-INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime)
+INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime, Latitude, Longitude)
 VALUES
-('Ristorante Cerasè', 'Pizza, pasta e piatti a base di pesce e frutti di mare su una terrazza affacciata sul Golfo di Napoli.', 'Corso Filangieri, 4, 80069 Vico Equense NA', 'Pesce', '12-00');
+('Ristorante Cerasè', 'Pizza, pasta e piatti a base di pesce e frutti di mare su una terrazza affacciata sul Golfo di Napoli.', 'Corso Filangieri, 4, 80069 Vico Equense NA', 'Pesce', '12-00', 40.6597, 14.4319);
 
-INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime)
-VALUES('Zerilli','Locale con cocktail raffinati e colazioni impareggiabili','Corso Umberto I°, 80069 Vico Equense NA','Cocktail','06:30-00');
+INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime, Latitude, Longitude)
+VALUES('Zerilli','Locale con cocktail raffinati e colazioni impareggiabili','Corso Umberto I°, 80069 Vico Equense NA','Cocktail','06:30-00', 40.6609, 14.4322);
 
-INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime)
-VALUES('Ristorante Al Buco','Pizzeria con una ampia gamma di saltimbocca e rustici da asporto con consegne a domicilio velocì e le sue pizze especie le classiche sono tra le migliori','Via Roma, 19, 80069 Vico Equense NA','Pizzeria','12:00-16:00 18:30-00:00');
+INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime, Latitude, Longitude)
+VALUES('Ristorante Al Buco','Pizzeria con una ampia gamma di saltimbocca e rustici da asporto con consegne a domicilio velocì e le sue pizze especie le classiche sono tra le migliori','Via Roma, 19, 80069 Vico Equense NA','Pizzeria','12:00-16:00 18:30-00:00', 40.6616, 14.4331);
 
-INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime)
-VALUES('Ristorante Pizza a metro','Piatti di pesce e pizze serviti in un elegante sala luminosa con splendidi lampadari o su una terrazza rigogliosa.','Corso Giovanni Nicotera, 15, 80069 Vico Equense NA','Pizzeria','12:00-00:00');
+INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime, Latitude, Longitude)
+VALUES('Ristorante Pizza a metro','Piatti di pesce e pizze serviti in un elegante sala luminosa con splendidi lampadari o su una terrazza rigogliosa.','Corso Giovanni Nicotera, 15, 80069 Vico Equense NA','Pizzeria','12:00-00:00', 40.6589, 14.4308);
 
 -- ================================================
 -- INSERIMENTO PREFERITI

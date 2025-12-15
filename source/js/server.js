@@ -241,3 +241,16 @@ app.post('/favorites/remove', async (req, res) => {
         return res.status(500).json({ success: false, error: err.message });
     }
 });
+
+// ottenere ristoranti per mappa
+app.post("/restaurants", async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT * FROM Restaurant`);
+
+    res.json({ success: true, restaurants: rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, msg: "Errore DB" });
+  }
+});
