@@ -1,150 +1,62 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Login effettuato</title>
-    <link rel="stylesheet" href="style.css" />
+    <title>FoodTour - Search</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script defer src="js/success.js"></script>
+    <script src="js/translate.js"></script>
 </head>
+
 <body>
-    <div class="container map-layout">
-        <div id="map-container">
-            <div id="map"></div>
-        </div>
-        <aside id="sidebar">
+
+    <!-- SELETTORE LINGUA -->
+    <div class="lang-selector">
+        <button class="lang-btn active" onclick="setLanguage('it')">IT</button>
+        <button class="lang-btn" onclick="setLanguage('en')">EN</button>
+        <button class="lang-btn" onclick="setLanguage('es')">ES</button>
+        <button class="lang-btn" onclick="setLanguage('fr')">FR</button>
+        <button class="lang-btn" onclick="setLanguage('ja')">JA</button>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="success.html">
+            <img src="assets/logo.png" alt="FoodTour Logo" class="navbar-logo">
+        </a>
+    </nav>
+
+
+    <!-- AREA MAPPA -->
+    <div class="map-container">
+        <div id="map"></div>
+
+        <!-- SIDEBAR -->
+        <aside id="sidebar" class="sidebar">
             <div class="sidebar-header">
-                <h2 id="sidebar-title">Dettagli ristorante</h2>
-                <button id="sidebar-close" class="btn small">Chiudi</button>
+                <h2 id="sidebar-title"></h2>
+                <button id="favoriteBtn" class="favorite-btn">
+                    <img id="favoriteIcon" src="assets/icons/heart_empty.png" alt="Preferiti">
+                </button>
             </div>
+
             <div id="sidebar-content" class="sidebar-content">
-                <p>Seleziona un ristorante sulla mappa per vedere le informazioni qui.</p>
+                <p id="sidebar-message"></p>
             </div>
         </aside>
     </div>
 
-    <!-- Map controls and enhanced behavior: geolocation, directions, colored markers -->
-    <div id="map-footer">
-        <button id="locate-btn" class="map-control-btn">Localizzami</button>
-        <label class="map-toggle"><input id="toggle-restaurants" type="checkbox" checked> Mostra ristoranti</label>
+    <!-- FOOTER CONTROLLI MAPPA -->
+    <div id="map-footer" class="map-footer">
+        <a id="go-to-profile" class="map-control-btn" href="profile.html"></a>
+        <a id="go-to-favorites" class="map-control-btn" href="favorites.html"></a>
+        <a id="go-to-recent" class="map-control-btn" href="recent.html"></a>
+        <a id="go-to-logout" class="map-control-btn"></a>
     </div>
 
-    <script>
-        // Enhanced map + sidebar logic
-        let map, geocoder, infoWindow;
-        let markers = [];
-        let userMarker = null;
-        let directionsService, directionsRenderer;
-        let showRestaurants = true;
-
-        // Default color rules (can be overridden via setColorRules)
-        // Priority: explicit `rest.color` > category mapping > rating thresholds
-        let colorRules = function(rest){
-            if(rest && rest.color) return rest.color;
-            if(rest && rest.category){
-                const cat = (rest.category||'').toLowerCase();
-                if(cat.includes('pizzeria')) return '#f97316';
-                if(cat.includes('sea') || cat.includes('fish')) return '#06b6d4';
-            }
-            const r = parseFloat((rest && rest.rating) || 0);
-            if(r >= 4.5) return '#10b981';
-            if(r >= 4.0) return '#f59e0b';
-            return '#ef4444';
-        };
-
-        function setColorRules(rules){
-            if(typeof rules === 'function') colorRules = rules;
-            else if(typeof rules === 'object'){
-                colorRules = (rest) => {
-                    if(rest.category && rules[rest.category]) return rules[rest.category];
-                    return '#3b82f6';
-                };
-            }
-            markers.forEach(m => { try{ m.setIcon(makeMarkerSymbol(colorRules(m.rest))); }catch(e){} });
-        }
-
-        function makeMarkerSymbol(color){
-            return { path: google.maps.SymbolPath.CIRCLE, scale: 8, fillColor: color, fillOpacity: 1, strokeColor: '#ffffff', strokeWeight: 2 };
-        }
-
-        function initMap(){
-            geocoder = new google.maps.Geocoder();
-            infoWindow = new google.maps.InfoWindow();
-            directionsService = new google.maps.DirectionsService();
-            directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
-
-            geocoder.geocode({ address: 'Vico Equense, Italy' }, function(results, status){
-                const center = (status === 'OK' && results[0]) ? results[0].geometry.location : { lat:40.60, lng:14.36 };
-                map = new google.maps.Map(document.getElementById('map'), { center: center, zoom: 14, mapTypeControl: true, fullscreenControl: true });
-                directionsRenderer.setMap(map);
-
-                document.getElementById('locate-btn').addEventListener('click', getUserLocation);
-                document.getElementById('toggle-restaurants').addEventListener('change', (e)=>{ showRestaurants = e.target.checked; updateMarkersVisibility(); });
-
-                loadRestaurants();
-            });
-        }
-
-        async function loadRestaurants(){
-            try{
-                const res = await fetch('/api/restaurants');
-                if(!res.ok) throw new Error('Failed to fetch restaurants');
-                const data = await res.json();
-                data.forEach(async (rest) => {
-                    let position = null;
-                    if(rest.lat && rest.lng) position = { lat: parseFloat(rest.lat), lng: parseFloat(rest.lng) };
-                    else if(rest.address){ try{ position = await geocodeAddress(rest.address); }catch(e){ console.warn('Geocode failed', rest.address); } }
-                    if(position) createMarker(position, rest);
-                });
-            }catch(e){ console.error('Error loading restaurants', e); }
-        }
-
-        function createMarker(position, rest){
-            const color = colorRules(rest);
-            const marker = new google.maps.Marker({ position, map, title: rest.name, icon: makeMarkerSymbol(color) });
-            marker.rest = rest;
-            marker.addListener('click', () => { infoWindow.setContent(`<div style="min-width:200px;"><strong>${escapeHtml(rest.name||'Ristorante')}</strong><br>${escapeHtml(rest.address||'')}</div>`); infoWindow.open(map, marker); openSidebar(rest, position); });
-            markers.push(marker);
-        }
-
-        function updateMarkersVisibility(){ markers.forEach(m => { m.setMap(showRestaurants ? map : null); }); }
-
-        function getUserLocation(){
-            if(!navigator.geolocation){ alert('Geolocalizzazione non supportata dal browser'); return; }
-            navigator.geolocation.getCurrentPosition((pos)=>{
-                const latlng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-                if(userMarker) userMarker.setMap(null);
-                userMarker = new google.maps.Marker({ position: latlng, map, title: 'La tua posizione', icon: { path: google.maps.SymbolPath.CIRCLE, scale:9, fillColor:'#2563eb', fillOpacity:1, strokeColor:'#fff', strokeWeight:2 } });
-                map.panTo(latlng); map.setZoom(14);
-            }, (err)=>{ alert('Impossibile ottenere la posizione: ' + err.message); });
-        }
-
-        function showDirectionsTo(rest, destPos){
-            if(!directionsService) return;
-            if(!userMarker){ if(!confirm('Per calcolare le indicazioni è necessaria la tua posizione. Vuoi abilitarla ora?')) return; getUserLocation(); setTimeout(()=>{ if(userMarker) computeRoute(userMarker.getPosition(), destPos); else alert('Non è stato possibile ottenere la posizione'); }, 1200); }
-            else computeRoute(userMarker.getPosition(), destPos);
-        }
-
-        function computeRoute(originLatLng, destPos){
-            directionsService.route({ origin: originLatLng, destination: destPos, travelMode: google.maps.TravelMode.DRIVING }, (result, status)=>{
-                if(status === 'OK') directionsRenderer.setDirections(result);
-                else alert('Impossibile calcolare il percorso: ' + status);
-            });
-        }
-
-        function openSidebar(rest, position){
-            const contentEl = document.getElementById('sidebar-content'); contentEl.innerHTML = '';
-            const title = document.createElement('h3'); title.textContent = rest.name || 'Ristorante'; contentEl.appendChild(title);
-            if(rest.images && rest.images.length){ const gallery = document.createElement('div'); gallery.className = 'gallery-mini'; rest.images.forEach(src=>{ const img = document.createElement('img'); img.src = src; img.alt = rest.name || ''; img.className = 'mini-img'; img.addEventListener('click', ()=>{ window.open(src, '_blank'); }); gallery.appendChild(img); }); contentEl.appendChild(gallery); }
-            if(rest.description){ const p = document.createElement('p'); p.style.marginTop='0.6rem'; p.textContent = rest.description; contentEl.appendChild(p); }
-            const meta = document.createElement('div'); meta.className = 'meta'; meta.innerHTML = `<strong>Indirizzo:</strong> ${escapeHtml(rest.address||'N/A')}<br><strong>Orari:</strong> ${escapeHtml(rest.open_time||'')} - ${escapeHtml(rest.close_time||'')}`; contentEl.appendChild(meta);
-            const dirWrap = document.createElement('div'); dirWrap.style.marginTop='0.6rem'; const dirBtn = document.createElement('button'); dirBtn.className='btn secondary'; dirBtn.textContent='Indicazioni'; dirBtn.addEventListener('click', ()=>{ showDirectionsTo(rest, position); }); dirWrap.appendChild(dirBtn); const clearBtn = document.createElement('button'); clearBtn.className='btn small'; clearBtn.style.marginLeft='0.5rem'; clearBtn.textContent='Pulisci percorso'; clearBtn.addEventListener('click', ()=>{ directionsRenderer.set('directions', null); }); dirWrap.appendChild(clearBtn); contentEl.appendChild(dirWrap);
-        }
-
-        function escapeHtml(str){ if(!str) return ''; return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
-
-        document.addEventListener('DOMContentLoaded', ()=>{ document.getElementById('sidebar-close').addEventListener('click', ()=>{ document.getElementById('sidebar-content').innerHTML = '<p>Seleziona un ristorante sulla mappa per vedere le informazioni qui.</p>'; directionsRenderer.set('directions', null); }); });
-    </script>
-
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAv9soMTmE8ZtxZVT3wPunm6htPSxL-ieU&callback=initMap"></script>
 </body>
 </html>
