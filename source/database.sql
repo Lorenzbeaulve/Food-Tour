@@ -74,32 +74,33 @@ VALUES
 -- ================================================
 INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime, Latitude, Longitude)
 VALUES
-('Pizzeria Cardone', 'Pizza, rosticceria e focaccia in un ristorante self-service con sede in un ex fattoria.\n Tra le pizze più particolari ci sono consigliate zucchine pancetta e provola e alla diavola', 'Via le Pietre, 13, 80069 Vico Equense NA','Pizzeria','18:00-00:00', 40.6599, 14.4338);
+('Pizzeria Cardone', 'Pizza, rosticceria e focaccia in un ristorante self-service con sede in un ex fattoria.\n Tra le pizze più particolari ci sono consigliate zucchine pancetta e provola e alla diavola', 'Via le Pietre, 13, 80069 Vico Equense NA','Pizzeria','18:00-00:00', 40.65722406769875, 14.434010042216876);
 
 INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime, Latitude, Longitude)
 VALUES
-('Gelateria Gabriele', 'Leccornie artigianali, come gelati e semifreddi, e liquori in locale curato con banco dei formaggi e salumi.', 'Corso Umberto I°, 8, 80069 Vico Equense NA','Gelateria','08:30-14:00  16:00-00:00', 40.6611, 14.4325);
+('Gelateria Gabriele', 'Leccornie artigianali, come gelati e semifreddi, e liquori in locale curato con banco dei formaggi e salumi.', 'Corso Umberto I°, 8, 80069 Vico Equense NA','Gelateria','08:30-14:00  16:00-00:00', 40.662058518153664, 14.42611249148304);
 
 INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime, Latitude, Longitude)
 VALUES
-('Pizzeria da Franco', 'Specialità di Salumi, vini e pizze da asporto incentrato sul farti provare i sapori tipici della Salumeria Vicana.\n Aperto fino a tarda notte ', 'Corso Filangieri, 94, 80069 Vico Equense NA','Salumeria','08:00-02:00', 40.6606, 14.4342);
+('Pizzeria da Franco', 'Specialità di Salumi, vini e pizze da asporto incentrato sul farti provare i sapori tipici della Salumeria Vicana.\n Aperto fino a tarda notte ', 'Corso Filangieri, 94, 80069 Vico Equense NA','Salumeria','08:00-02:00', 40.663280100282286, 14.425521686494745);
 
 INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime, Latitude, Longitude)
 VALUES
-('Rosticceria del Corso', 'Rosticeria con limitati posti a sedere ma rapida consegna al banco utile quando vuoi mangiare qualcosa di buono al volo. Chiuso di Lunedì', 'Via, Corso Filangieri, 87, 80069 Vico Equense NA', 'Rosticeria', '10:30-14:30 17-00', 40.6604, 14.4340);
+('Rosticceria del Corso', 'Rosticeria con limitati posti a sedere ma rapida consegna al banco utile quando vuoi mangiare qualcosa di buono al volo. Chiuso di Lunedì', 'Via, Corso Filangieri, 87, 80069 Vico Equense NA', 'Rosticeria', '10:30-14:30 17-00', 40.66251345208084, 14.426750314335786);
 
 INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime, Latitude, Longitude)
 VALUES
-('Ristorante Cerasè', 'Pizza, pasta e piatti a base di pesce e frutti di mare su una terrazza affacciata sul Golfo di Napoli.', 'Corso Filangieri, 4, 80069 Vico Equense NA', 'Pesce', '12-00', 40.6597, 14.4319);
+('Ristorante Cerasè', 'Pizza, pasta e piatti a base di pesce e frutti di mare su una terrazza affacciata sul Golfo di Napoli.', 'Corso Filangieri, 4, 80069 Vico Equense NA', 'Pesce', '12-00', 40.66375845703119, 14.42781569949431);
 
 INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime, Latitude, Longitude)
-VALUES('Zerilli','Locale con cocktail raffinati e colazioni impareggiabili','Corso Umberto I°, 80069 Vico Equense NA','Cocktail','06:30-00', 40.6609, 14.4322);
+VALUES('Zerilli','Locale con cocktail raffinati e colazioni impareggiabili','Corso Umberto I°, 80069 Vico Equense NA','Cocktail','06:30-00', 40.6623618993264, 14.426791021523249);
 
 INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime, Latitude, Longitude)
-VALUES('Ristorante Al Buco','Pizzeria con una ampia gamma di saltimbocca e rustici da asporto con consegne a domicilio velocì e le sue pizze especie le classiche sono tra le migliori','Via Roma, 19, 80069 Vico Equense NA','Pizzeria','12:00-16:00 18:30-00:00', 40.6616, 14.4331);
+VALUES('Ristorante Al Buco','Pizzeria con una ampia gamma di saltimbocca e rustici da asporto con consegne a domicilio velocì e le sue pizze especie le classiche sono tra le migliori','Via Roma, 19, 80069 Vico Equense NA','Pizzeria','12:00-16:00 18:30-00:00', 40.661820048906385, 14.427229680058527);
 
 INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime, Latitude, Longitude)
-VALUES('Ristorante Pizza a metro','Piatti di pesce e pizze serviti in un elegante sala luminosa con splendidi lampadari o su una terrazza rigogliosa.','Corso Giovanni Nicotera, 15, 80069 Vico Equense NA','Pizzeria','12:00-00:00', 40.6589, 14.4308);
+VALUES('Ristorante Pizza a metro','Piatti di pesce e pizze serviti in un elegante sala luminosa con splendidi lampadari o su una terrazza rigogliosa.','Corso Giovanni Nicotera, 15, 80069 Vico Equense NA','Pizzeria','12:00-00:00', 40.66174574106387, 14.428019450485925);
+
 
 -- ================================================
 -- INSERIMENTO PREFERITI
