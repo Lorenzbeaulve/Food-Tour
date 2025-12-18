@@ -1,9 +1,7 @@
 const API_BASE = "http://localhost:3000";
 
 // inizializza la mappa centrata sul Vico Equense
-let map = L.map('map').setView([40.6608, 14.4333], 15);
-
-/* chiede posizione e localizza utente
+let map = L.map('map').setView([40.662381, 14.426408], 17);
 
 // prova a localizzare l'utente
 map.locate({ setView: true, maxZoom: 17 }); 
@@ -21,8 +19,6 @@ map.on('locationerror', () => {
     alert("Impossibile determinare la posizione.");
 });
 
-*/
-
 // aggiungi tile layer (sfondo mappa)
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -35,12 +31,13 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // definizione icone
 const iconSize = [32, 32];
 const icons = {
-  pizzeria: L.icon({ iconUrl: "assets/icons/temp.png", iconSize, iconAnchor:[16,32], popupAnchor:[0,-32] }),
-  gelateria: L.icon({ iconUrl: "assets/icons/temp.png", iconSize, iconAnchor:[16,32], popupAnchor:[0,-32] }),
-  pesce:    L.icon({ iconUrl: "assets/icons/temp.png", iconSize, iconAnchor:[16,32], popupAnchor:[0,-32] }),
-  cocktail: L.icon({ iconUrl: "assets/icons/temp.png", iconSize, iconAnchor:[16,32], popupAnchor:[0,-32] }),
-  ristorante:L.icon({ iconUrl: "assets/icons/temp.png", iconSize, iconAnchor:[16,32], popupAnchor:[0,-32] }),
-  default:  L.icon({ iconUrl: "assets/icons/temp.png", iconSize, iconAnchor:[16,32], popupAnchor:[0,-32] }),
+  pizzeria: L.icon({ iconUrl: "assets/icons/pizzeria.png", iconSize, iconAnchor:[16,32], popupAnchor:[0,-32] }),
+  gelateria: L.icon({ iconUrl: "assets/icons/gelateria.png", iconSize, iconAnchor:[16,32], popupAnchor:[0,-32] }),
+  pesce:    L.icon({ iconUrl: "assets/icons/pesce.png", iconSize, iconAnchor:[16,32], popupAnchor:[0,-32] }),
+  cocktail: L.icon({ iconUrl: "assets/icons/cocktail.png", iconSize, iconAnchor:[16,32], popupAnchor:[0,-32] }),
+  salumeria: L.icon({ iconUrl: "assets/icons/salumeria.png", iconSize, iconAnchor:[16,32], popupAnchor:[0,-32] }),
+  rosticceria:L.icon({ iconUrl: "assets/icons/rosticceria.png", iconSize, iconAnchor:[16,32], popupAnchor:[0,-32] }),
+  default:  L.icon({ iconUrl: "assets/icons/default.png", iconSize, iconAnchor:[16,32], popupAnchor:[0,-32] }),
 };
 
 // ottenere icona in base alla tipologia
