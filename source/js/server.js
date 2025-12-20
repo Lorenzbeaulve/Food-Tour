@@ -254,3 +254,53 @@ app.post("/restaurants", async (req, res) => {
     res.status(500).json({ success: false, msg: "Errore DB" });
   }
 });
+
+// stato preferito per (email, ristorante)
+app.post('/favorites/status', async (req, res) => {
+  const { email, restaurant } = req.body || {};
+  if (!email || !restaurant) {
+    return res.status(400).json({ success: false, msg: 'Email e Restaurant richiesti' });
+  }
+
+  try {
+    const [rows] = await pool.execute(
+      "SELECT Preferito FROM user_Prefere_A_Restaurant WHERE user_email = ? AND Restaurant_Name = ?",
+      [email, restaurant]
+    );
+    const isFavorite = rows && rows.length > 0 && rows[0].Preferito === 'V';
+    return res.json({ success: true, isFavorite });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// toggle preferito: se V -> F, altrimenti -> V (con INSERT se non esiste)
+app.post('/favorites/toggle', async (req, res) => {
+  const { email, restaurant } = req.body || {};
+  if (!email || !restaurant) {
+    return res.status(400).json({ success: false, msg: 'Email e Restaurant richiesti' });
+  }
+
+  try {
+    // leggi stato attuale
+    const [rows] = await pool.execute(
+      "SELECT Preferito FROM user_Prefere_A_Restaurant WHERE user_email = ? AND Restaurant_Name = ?",
+      [email, restaurant]
+    );
+
+    const currentlyFav = rows && rows.length > 0 && rows[0].Preferito === 'V';
+    const newValue = currentlyFav ? 'F' : 'V';
+
+    // upsert (se non esiste crea, se esiste aggiorna)
+    await pool.execute(
+      `INSERT INTO user_Prefere_A_Restaurant (user_email, Restaurant_Name, Preferito)
+       VALUES (?, ?, ?)
+       ON DUPLICATE KEY UPDATE Preferito = VALUES(Preferito)`,
+      [email, restaurant, newValue]
+    );
+
+    return res.json({ success: true, isFavorite: newValue === 'V' });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});

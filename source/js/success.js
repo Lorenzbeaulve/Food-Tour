@@ -29,14 +29,14 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 
 // definizione icone
-const iconSize = [32, 32];
+const iconSize = [40, 40];
 const icons = {
   pizzeria: L.icon({ iconUrl: "assets/icons/pizzeria.png", iconSize, iconAnchor:[16,32], popupAnchor:[0,-32] }),
   gelateria: L.icon({ iconUrl: "assets/icons/gelateria.png", iconSize, iconAnchor:[16,32], popupAnchor:[0,-32] }),
   pesce:    L.icon({ iconUrl: "assets/icons/pesce.png", iconSize, iconAnchor:[16,32], popupAnchor:[0,-32] }),
   cocktail: L.icon({ iconUrl: "assets/icons/cocktail.png", iconSize, iconAnchor:[16,32], popupAnchor:[0,-32] }),
   salumeria: L.icon({ iconUrl: "assets/icons/salumeria.png", iconSize, iconAnchor:[16,32], popupAnchor:[0,-32] }),
-  rosticceria:L.icon({ iconUrl: "assets/icons/rosticceria.png", iconSize, iconAnchor:[16,32], popupAnchor:[0,-32] }),
+  rosticceria: L.icon({ iconUrl: "assets/icons/rosticceria.png", iconSize, iconAnchor:[16,32], popupAnchor:[0,-32] }),
   default:  L.icon({ iconUrl: "assets/icons/default.png", iconSize, iconAnchor:[16,32], popupAnchor:[0,-32] }),
 };
 
@@ -53,8 +53,11 @@ function getIconByType(tipologia) {
 
 // mostrare i dettagli nella sidebar
 function showRestaurantDetails(restaurant) {
-  const sidebar = document.getElementById("sidebar-content");
+  selectedRestaurant = restaurant;
+  favoriteBtn?.classList.add("visible"); // mostra il bottone preferiti
+  refreshHeartStatus();
 
+  const sidebar = document.getElementById("sidebar-content");
   sidebar.innerHTML = `
     <h2>${restaurant.Name}</h2>
     <p><strong>Tipologia:</strong> ${restaurant.Tipologia}</p>
@@ -63,6 +66,7 @@ function showRestaurantDetails(restaurant) {
     <p><em>${restaurant.Location}</em></p>
   `;
 }
+
 
 // funzione per creare marker
 function createRestaurantMarker(r) {
@@ -99,6 +103,80 @@ async function loadRestaurants() {
 // chiamata funzione di inizializzazione
 loadRestaurants();
 
+
+
+
+
+// preferiti
+let selectedRestaurant = null;
+
+const favoriteBtn = document.getElementById("favoriteBtn");
+const favoriteIcon = document.getElementById("favoriteIcon");
+
+function getLoggedEmail() {
+  const userStr = localStorage.getItem("user");
+  if (!userStr) return null;
+  try {
+    const u = JSON.parse(userStr);
+    return u.email || null;
+  } catch {
+    return null;
+  }
+}
+
+function setHeart(isFav) {
+  if (!favoriteIcon) return;
+  favoriteIcon.src = isFav ? "assets/icons/heart_full.png" : "assets/icons/heart_empty.png";
+}
+
+async function refreshHeartStatus() {
+  const email = getLoggedEmail();
+  if (!email || !selectedRestaurant) {
+    setHeart(false);
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/favorites/status`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, restaurant: selectedRestaurant.Name })
+    });
+    const data = await res.json();
+    if (res.ok && data && data.success) setHeart(!!data.isFavorite);
+  } catch (e) {
+    console.error("Errore status preferito", e);
+  }
+}
+
+favoriteBtn?.addEventListener("click", async () => {
+  const email = getLoggedEmail();
+  if (!email) {
+    alert("Effettua il login per aggiungere preferiti.");
+    return;
+  }
+  if (!selectedRestaurant) {
+    alert("Seleziona prima un ristorante sulla mappa.");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/favorites/toggle`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, restaurant: selectedRestaurant.Name })
+    });
+    const data = await res.json();
+    if (res.ok && data && data.success) {
+      setHeart(!!data.isFavorite);
+    } else {
+      alert((data && (data.msg || data.error)) || "Errore preferiti");
+    }
+  } catch (e) {
+    console.error("Errore toggle preferito", e);
+    alert("Errore di rete durante il salvataggio preferito.");
+  }
+});
 
 
 

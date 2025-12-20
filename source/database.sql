@@ -86,7 +86,7 @@ VALUES
 
 INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime, Latitude, Longitude)
 VALUES
-('Rosticceria del Corso', 'Rosticeria con limitati posti a sedere ma rapida consegna al banco utile quando vuoi mangiare qualcosa di buono al volo. Chiuso di Lunedì', 'Via, Corso Filangieri, 87, 80069 Vico Equense NA', 'Rosticeria', '10:30-14:30 17-00', 40.66251345208084, 14.426750314335786);
+('Rosticceria del Corso', 'Rosticeria con limitati posti a sedere ma rapida consegna al banco utile quando vuoi mangiare qualcosa di buono al volo. Chiuso di Lunedì', 'Via, Corso Filangieri, 87, 80069 Vico Equense NA', 'Rosticceria', '10:30-14:30 17-00', 40.66251345208084, 14.426750314335786);
 
 INSERT INTO Restaurant (Name, Description, Location, Tipologia, OpeningAndClosingTime, Latitude, Longitude)
 VALUES

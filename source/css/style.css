@@ -389,7 +389,11 @@ button:hover { /* mouse hover */
 }
 
 /* button preferiti */
-.favorite-btn {
+#favoriteBtn {
+  display: none; /* nasconde il bottone finché non è selezionato un ristorante */
+}
+
+#favoriteBtn.visible {
     width: 40px;
     height: 40px;
     display: flex;
