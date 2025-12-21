@@ -49,7 +49,19 @@ CREATE TABLE user_Prefere_A_Restaurant (
     FOREIGN KEY (Restaurant_Name) REFERENCES Restaurant(Name)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
-
+-- ================================================
+-- TABELLA user_Recently_saw_a_Restaurant
+-- ================================================
+CREATE TABLE user_Recently_saw_a_Restaurant(
+	user_email VARCHAR(255),
+    Restaurant_Name VARCHAR(32),
+    Viewed_time DATETIME,
+    PRIMARY KEY (user_email, Restaurant_Name),
+    FOREIGN KEY (user_email) REFERENCES user(email)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (Restaurant_Name) REFERENCES Restaurant(Name)
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
 -- ================================================
 -- INSERIMENTO UTENTI
 -- ================================================
@@ -152,3 +164,14 @@ VALUES
 INSERT INTO user_Reviews_A_Restaurant (user_email, Restaurant_Name, Review, Consigliato)
 VALUES
 ('laura.blu@example.com', 'Ristorante Cerasè', 'Vista splendida e piatti ottimi.', 'V');
+
+-- ================================================
+-- INSERT user_Recently_saw_a_Restaurant
+-- ================================================
+INSERT INTO user_Recently_saw_a_Restaurant (user_email, Restaurant_Name,Viewed_time)
+VALUES
+('anna.verdi@example.com', 'Pizzeria da Franco','2025-01-12 19:45:22');
+
+INSERT INTO user_Recently_saw_a_Restaurant (user_email, Restaurant_Name,Viewed_time)
+VALUES
+('anna.verdi@example.com', 'Ristorante Pizza a metro','2025-01-15 12:10:05');
