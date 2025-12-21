@@ -187,4 +187,15 @@ document.addEventListener("DOMContentLoaded", () => { // imposta automaticamente
     setLanguage(savedLang);
 });
 
+// Utility per ottenere la lingua corrente e traduzioni singole
+function getLanguage() {
+    return localStorage.getItem('lang') || 'it';
+}
+
+function getTranslation(key) {
+    const lang = getLanguage();
+    if (translations[lang] && translations[lang][key] !== undefined) return translations[lang][key];
+    return key; // fallback: ritorna la chiave stessa
+}
+
 

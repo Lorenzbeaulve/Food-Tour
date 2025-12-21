@@ -304,3 +304,24 @@ app.post('/favorites/toggle', async (req, res) => {
     return res.status(500).json({ success: false, error: err.message });
   }
 });
+
+// recenti visti da un utente (ordinati dal più recente)
+app.post('/recent', async (req, res) => {
+    const { email } = req.body || {};
+    if (!email) return res.status(400).json({ success: false, msg: 'Email richiesta' });
+
+    try {
+        const [rows] = await pool.execute(
+            `SELECT Restaurant_Name, Viewed_time
+             FROM user_Recently_saw_a_Restaurant
+             WHERE user_email = ?
+             ORDER BY Viewed_time DESC`,
+            [email]
+        );
+        console.log('[RECENT] fetch for', email, 'returned', Array.isArray(rows) ? rows.length : typeof rows, 'rows');
+        return res.json({ success: true, recent: rows });
+    } catch (err) {
+        console.error('Recent fetch error', err && err.message ? err.message : err);
+        return res.status(500).json({ success: false, error: err.message });
+    }
+});
