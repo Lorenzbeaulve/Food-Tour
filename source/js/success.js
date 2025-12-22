@@ -77,7 +77,10 @@ function createRestaurantMarker(r) {
   L.marker([lat, lng], { icon: getIconByType(r.Tipologia) })
     .addTo(map)
     .bindPopup(`<strong>${r.Name}</strong>`)
-    .on("click", () => showRestaurantDetails(r));
+    .on("click", async () => {
+      showRestaurantDetails(r);
+      await addToRecent(r.Name);   // <<< salva nei recenti
+    });
 }
 
 // carica ristoranti dal backend
@@ -177,6 +180,25 @@ favoriteBtn?.addEventListener("click", async () => {
     alert("Errore di rete durante il salvataggio preferito.");
   }
 });
+
+
+
+
+// recenti
+async function addToRecent(restaurantName) {
+  const email = getLoggedEmail(); // getLoggedEmail definita sopra (sezione preferiti)
+  if (!email || !restaurantName) return;
+
+  try {
+    await fetch(`${API_BASE}/recent/add`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, restaurant: restaurantName })
+    });
+  } catch (e) {
+    console.error("Errore add recent", e);
+  }
+}
 
 
 

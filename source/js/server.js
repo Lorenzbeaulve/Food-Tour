@@ -305,23 +305,47 @@ app.post('/favorites/toggle', async (req, res) => {
   }
 });
 
-// recenti visti da un utente (ordinati dal più recente)
-app.post('/recent', async (req, res) => {
-    const { email } = req.body || {};
-    if (!email) return res.status(400).json({ success: false, msg: 'Email richiesta' });
+// salvare un recente (inserisce o se esiste aggiorna timestamp)
+app.post('/recent/add', async (req, res) => {
+  const { email, restaurant } = req.body || {};
+  if (!email || !restaurant) {
+    return res.status(400).json({ success: false, msg: 'Email e restaurant richiesti' });
+  }
 
-    try {
-        const [rows] = await pool.execute(
-            `SELECT Restaurant_Name, Viewed_time
-             FROM user_Recently_saw_a_Restaurant
-             WHERE user_email = ?
-             ORDER BY Viewed_time DESC`,
-            [email]
-        );
-        console.log('[RECENT] fetch for', email, 'returned', Array.isArray(rows) ? rows.length : typeof rows, 'rows');
-        return res.json({ success: true, recent: rows });
-    } catch (err) {
-        console.error('Recent fetch error', err && err.message ? err.message : err);
-        return res.status(500).json({ success: false, error: err.message });
-    }
+  try {
+    await pool.execute(
+      `INSERT INTO user_Recent_A_Restaurant (user_email, Restaurant_Name)
+       VALUES (?, ?)
+       ON DUPLICATE KEY UPDATE viewed_at = CURRENT_TIMESTAMP`,
+      [email, restaurant]
+    );
+
+    return res.json({ success: true });
+  } catch (err) {
+    console.error('Recent add error', err);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// visualizzare recenti (ordinati dal più recente)
+app.post('/recent', async (req, res) => {
+  const { email } = req.body || {};
+  if (!email) return res.status(400).json({ success: false, msg: 'Email richiesta' });
+
+  try {
+    const [rows] = await pool.execute(
+      `SELECT r.Name, r.Description, r.Location, r.Tipologia, r.OpeningAndClosingTime, u.viewed_at
+       FROM user_Recent_A_Restaurant u
+       JOIN Restaurant r ON r.Name = u.Restaurant_Name
+       WHERE u.user_email = ?
+       ORDER BY u.viewed_at DESC
+       LIMIT 5`, // visualizza i 5 più recenti
+      [email]
+    );
+
+    return res.json({ success: true, recent: rows });
+  } catch (err) {
+    console.error('Recent fetch error', err);
+    return res.status(500).json({ success: false, error: err.message });
+  }
 });

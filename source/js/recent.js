@@ -1,60 +1,60 @@
 // Recenti ristoranti
 const API_BASE = window.API_BASE || 'http://localhost:3000';
 
-async function loadRecentRestaurants() {
-    const userStr = localStorage.getItem('user');
-    const userEmail = userStr ? (() => { try { return JSON.parse(userStr).email } catch { return null } })() : null;
-
-    if (!userEmail) {
-        const emptyEl = document.getElementById('recent-empty');
-        if (emptyEl) emptyEl.textContent = getTranslation('no-data');
-        return;
-    }
-
-    try {
-        const response = await fetch(`${API_BASE}/recent`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: userEmail })
-        });
-
-        const data = await response.json();
-
-        if (data && data.success && Array.isArray(data.recent) && data.recent.length > 0) {
-            const emptyEl = document.getElementById('recent-empty');
-            if (emptyEl) emptyEl.style.display = 'none';
-            const recentList = document.getElementById('recent-list');
-            if (!recentList) return;
-            recentList.innerHTML = '';
-
-            data.recent.forEach(item => {
-                const li = document.createElement('li');
-                li.style.cssText = 'padding: 1rem; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;';
-                
-                const name = document.createElement('strong');
-                name.textContent = item.Restaurant_Name;
-                
-                const time = document.createElement('span');
-                time.style.color = '#888';
-                time.textContent = new Date(item.Viewed_time).toLocaleString(getLanguage());
-                
-                li.appendChild(name);
-                li.appendChild(time);
-                recentList.appendChild(li);
-            });
-        } else {
-            const emptyEl = document.getElementById('recent-empty');
-            if (emptyEl) emptyEl.textContent = getTranslation('no-recent');
-        }
-    } catch (err) {
-        console.error('Errore caricamento recenti:', err);
-        const emptyEl = document.getElementById('recent-empty');
-        if (emptyEl) emptyEl.textContent = getTranslation('error');
-    }
+function getLoggedEmail() {
+  const userStr = localStorage.getItem("user");
+  if (!userStr) return null;
+  try {
+    const u = JSON.parse(userStr);
+    return u.email || null;
+  } catch {
+    return null;
+  }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const title = document.getElementById('recent-title'); if (title) title.textContent = getTranslation('recent');
-    const homeText = document.getElementById('home-text'); if (homeText) homeText.textContent = getTranslation('Torna alla Home');
-    loadRecentRestaurants();
-});
+async function loadRecent() {
+  const email = getLoggedEmail();
+  const list = document.getElementById("recent-list");
+  const empty = document.getElementById("recent-empty");
+
+  if (!email) {
+    empty.textContent = "Devi effettuare il login per vedere i recenti.";
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/recent`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      empty.textContent = "Errore nel caricamento dei recenti.";
+      return;
+    }
+
+    const recent = data.recent || [];
+    if (recent.length === 0) {
+      empty.textContent = "Nessun ristorante recente.";
+      return;
+    }
+
+    empty.textContent = "";
+    list.innerHTML = recent
+      .map(r => `
+        <li class="favorite-item" style="margin-bottom: 12px;">
+          <strong>${r.Name}</strong><br/>
+          <span>${r.Location}</span><br/>
+          <small>${r.Tipologia} • ${r.OpeningAndClosingTime || ""}</small>
+        </li>
+      `)
+      .join("");
+  } catch (e) {
+    console.error(e);
+    empty.textContent = "Errore di rete.";
+  }
+}
+
+document.addEventListener("DOMContentLoaded", loadRecent);
