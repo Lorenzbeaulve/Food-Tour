@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FoodTour - Login</title>
     <link rel="stylesheet" href="css/style.css">
-    <script src="js/translate.js"></script>
     <script src="js/auth.js" defer></script>
 </head>
 
@@ -24,18 +23,18 @@
     <div class="login-container">
         <img src="assets/logo.png" class="logo" alt="FoodTour Logo">
         <form id="login-form">
-            <label for="email" id="email-label"></label>
+            <label for="email" id="email-label">Email</label>
             <input id="email" type="email" required>
 
-            <label for="password" id="password-label"></label>
+            <label for="password" id="password-label">Password</label>
             <input id="password" type="password" required>
 
             <div id="login-error" class="form-error" aria-live="polite"></div>
 
-            <button id="login-btn" type="submit"></button>
+            <button id="login-btn" type="submit">Accedi</button>
             
         </form>
-        <button id="signup-btn" type="button" class="secondary" onclick="window.location.href='signup.html'">Iscriviti</button>
+        <button id="signup-btn" type="button" class="secondary" onclick="window.location.href='signup.html'">Registrati</button>
     </div>
 
 </body>

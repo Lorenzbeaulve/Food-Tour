@@ -31,6 +31,7 @@ translations.es["signup-btn"] = "Registrarse";
 translations.fr["signup-btn"] = "S'inscrire";
 translations.ja["signup-btn"] = "登録";
 
+// signup.html
 translations.it["name-label"] = "Nome";
 translations.en["name-label"] = "Name";
 translations.es["name-label"] = "Nombre";
@@ -80,7 +81,7 @@ translations.es["go-to-logout"] = "Cerrar sesión";
 translations.fr["go-to-logout"] = "Déconnexion";
 translations.ja["go-to-logout"] = "ログアウト";
 
-// profile.html, favorites.html, recents.html
+// profile.html, favorites.html, recents.html, reviews.html
 translations.it["home-text"] = "Torna alla home";
 translations.en["home-text"] = "Back to home";
 translations.es["home-text"] = "Volver al inicio";
@@ -164,11 +165,11 @@ translations.es["reviews-title"] = "Reseñas";
 translations.fr["reviews-title"] = "Avis";
 translations.ja["reviews-title"] = "レビュー";
 
-translations.it["reviews-restaurant"] = "Caricamento...";
-translations.en["reviews-restaurant"] = "Loading...";
-translations.es["reviews-restaurant"] = "Cargando...";
-translations.fr["reviews-restaurant"] = "Chargement...";
-translations.ja["reviews-restaurant"] = "読み込み中...";
+translations.it["reviews-restaurant"] = "Nessuna recensione.";
+translations.en["reviews-restaurant"] = "No reviews.";
+translations.es["reviews-restaurant"] = "Sin reseñas.";
+translations.fr["reviews-restaurant"] = "Aucun avis.";
+translations.ja["reviews-restaurant"] = "レビューはありません。";
 
 //
 //
