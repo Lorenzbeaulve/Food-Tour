@@ -1,5 +1,5 @@
 -- ================================================
--- TABELLA UTENTE
+-- TABELLA UTENTI
 -- ================================================
 CREATE TABLE user (
     email VARCHAR(255) PRIMARY KEY,
@@ -9,7 +9,7 @@ CREATE TABLE user (
 );
 
 -- ================================================
--- TABELLA RISTORANTE
+-- TABELLA RISTORANTI
 -- ================================================
 CREATE TABLE Restaurant (
     Name VARCHAR(32) PRIMARY KEY,
@@ -22,13 +22,14 @@ CREATE TABLE Restaurant (
 );
 
 -- ================================================
--- TABELLA RECENSIONE
+-- TABELLA RECENSIONI
 -- ================================================
 CREATE TABLE user_Reviews_A_Restaurant (
     user_email VARCHAR(255),
     Restaurant_Name VARCHAR(32),
     Review VARCHAR(75),
     Consigliato CHAR(1) check(Consigliato in('V','F')),
+    reviewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (user_email, Restaurant_Name),
     FOREIGN KEY (user_email) REFERENCES user(email)
         ON DELETE CASCADE ON UPDATE CASCADE,
@@ -37,7 +38,7 @@ CREATE TABLE user_Reviews_A_Restaurant (
 );
 
 -- ================================================
--- TABELLA PREFERITO
+-- TABELLA PREFERITI
 -- ================================================
 CREATE TABLE user_Prefere_A_Restaurant (
     user_email VARCHAR(255),

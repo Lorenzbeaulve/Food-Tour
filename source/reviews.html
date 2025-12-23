@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FoodTour - Recensioni</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="js/translate.js"></script>
+  <script defer src="js/reviews.js"></script>
+</head>
+
+<body>
+  <div class="lang-selector">
+    <button class="lang-btn active" onclick="setLanguage('it')">IT</button>
+    <button class="lang-btn" onclick="setLanguage('en')">EN</button>
+    <button class="lang-btn" onclick="setLanguage('es')">ES</button>
+    <button class="lang-btn" onclick="setLanguage('fr')">FR</button>
+    <button class="lang-btn" onclick="setLanguage('ja')">JA</button>
+  </div>
+
+  <nav class="navbar">
+    <a href="success.html">
+      <img src="assets/logo.png" alt="FoodTour Logo" class="navbar-logo">
+    </a>
+  </nav>
+
+  <div class="favorites-container">
+    <h1 id="reviews-title"></h1>
+
+    <div class="favorites-card">
+      <h2 id="reviews-restaurant"></h2>
+
+      <ul id="reviews-list" style="list-style:none; padding:0; margin-top:1.5rem;">
+        <li id="reviews-empty"></li>
+      </ul>
+
+      <div class="home-actions">
+        <a class="btn" href="success.html" id="home-text"></a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

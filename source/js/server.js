@@ -349,3 +349,72 @@ app.post('/recent', async (req, res) => {
     return res.status(500).json({ success: false, error: err.message });
   }
 });
+
+// ultime 3 recensioni
+app.post('/reviews/recent', async (req, res) => {
+  const { restaurant } = req.body || {};
+  if (!restaurant) return res.status(400).json({ success: false, msg: 'Restaurant richiesto' });
+
+  try {
+    const [rows] = await pool.execute(
+      `SELECT u.Nome, u.Cognome, r.Review, r.Consigliato, r.reviewed_at
+       FROM user_Reviews_A_Restaurant r
+       JOIN user u ON u.email = r.user_email
+       WHERE r.Restaurant_Name = ?
+       ORDER BY r.reviewed_at DESC
+       LIMIT 3`,
+      [restaurant]
+    );
+
+    return res.json({ success: true, reviews: rows });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// tutte le recensioni
+app.post('/reviews/all', async (req, res) => {
+  const { restaurant } = req.body || {};
+  if (!restaurant) return res.status(400).json({ success: false, msg: 'Restaurant richiesto' });
+
+  try {
+    const [rows] = await pool.execute(
+      `SELECT u.Nome, u.Cognome, r.Review, r.Consigliato, r.reviewed_at
+       FROM user_Reviews_A_Restaurant r
+       JOIN user u ON u.email = r.user_email
+       WHERE r.Restaurant_Name = ?
+       ORDER BY r.reviewed_at DESC`,
+      [restaurant]
+    );
+
+    return res.json({ success: true, reviews: rows });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// se loggato, aggiungi o aggiorna recensione
+app.post('/reviews/add', async (req, res) => {
+  const { email, restaurant, review, consigliato } = req.body || {};
+  if (!email || !restaurant || !review) {
+    return res.status(400).json({ success: false, msg: 'Email, restaurant e review richiesti' });
+  }
+
+  const cons = (consigliato === 'V' || consigliato === 'F') ? consigliato : 'V';
+
+  try {
+    await pool.execute(
+      `INSERT INTO user_Reviews_A_Restaurant (user_email, Restaurant_Name, Review, Consigliato)
+       VALUES (?, ?, ?, ?)
+       ON DUPLICATE KEY UPDATE
+          Review = VALUES(Review),
+          Consigliato = VALUES(Consigliato),
+          reviewed_at = CURRENT_TIMESTAMP`,
+      [email, restaurant, review, cons]
+    );
+
+    return res.json({ success: true });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});

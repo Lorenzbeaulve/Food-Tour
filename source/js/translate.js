@@ -119,12 +119,6 @@ translations.es["favorites-empty"] = "Sin favoritos.";
 translations.fr["favorites-empty"] = "Aucun favori.";
 translations.ja["favorites-empty"] = "お気に入りはありません。";
 
-translations.it["return-home"] = "Torna alla home";
-translations.en["return-home"] = "Back to home";
-translations.es["return-home"] = "Volver al inicio";
-translations.fr["return-home"] = "Retour à l’accueil";
-translations.ja["return-home"] = "ホームに戻る";
-
 // recents.html
 translations.it["recent-title"] = "Visualizzati di recente";
 translations.en["recent-title"] = "Recently viewed";
@@ -157,11 +151,24 @@ translations.es["label-password"] = "Nueva contraseña";
 translations.fr["label-password"] = "Nouveau mot de passe";
 translations.ja["label-password"] = "新しいパスワード";
 
-translations.ja["save-profile-btn"] = "Salva";
 translations.it["save-profile-btn"] = "Salva Modifiche";
 translations.en["save-profile-btn"] = "Save Changes";
 translations.es["save-profile-btn"] = "Guardar cambios";
 translations.fr["save-profile-btn"] = "Enregistrer les modifications";
+translations.ja["save-profile-btn"] = "変更を保存";
+
+// reviews.html
+translations.it["reviews-title"] = "Recensioni";
+translations.en["reviews-title"] = "Reviews";
+translations.es["reviews-title"] = "Reseñas";
+translations.fr["reviews-title"] = "Avis";
+translations.ja["reviews-title"] = "レビュー";
+
+translations.it["reviews-restaurant"] = "Caricamento...";
+translations.en["reviews-restaurant"] = "Loading...";
+translations.es["reviews-restaurant"] = "Cargando...";
+translations.fr["reviews-restaurant"] = "Chargement...";
+translations.ja["reviews-restaurant"] = "読み込み中...";
 
 //
 //

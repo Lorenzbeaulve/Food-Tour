@@ -50,22 +50,157 @@ function getIconByType(tipologia) {
 
 
 
+// recensioni
+async function loadRecentReviews(restaurantName) {
+  const box = document.getElementById("reviews-preview");
+  if (!box) return;
+
+  box.innerHTML = "<p>Caricamento recensioni...</p>";
+
+  try {
+    const res = await fetch(`${API_BASE}/reviews/recent`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ restaurant: restaurantName })
+    });
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      box.innerHTML = "<p>Errore nel caricamento recensioni.</p>";
+      return;
+    }
+
+    const reviews = data.reviews || [];
+    if (reviews.length === 0) {
+      box.innerHTML = "<p>Nessuna recensione disponibile.</p>";
+      return;
+    }
+
+    box.innerHTML = reviews.map(r => `
+      <div class="review-item">
+        <div class="review-author">
+          ${r.Nome} ${r.Cognome}
+          <span class="review-meta">
+            • ${r.Consigliato === 'V' ? 'Consigliato' : 'Non consigliato'}
+          </span>
+        </div>
+        <div class="review-text">${r.Review}</div>
+      </div>
+    `).join("");
+
+  } catch (e) {
+    console.error(e);
+    box.innerHTML = "<p>Errore di rete.</p>";
+  }
+}
+
+
+
 
 // mostrare i dettagli nella sidebar
 function showRestaurantDetails(restaurant) {
   selectedRestaurant = restaurant;
+
   favoriteBtn?.classList.add("visible"); // mostra il bottone preferiti
   refreshHeartStatus();
 
+  const email = getLoggedEmail();
   const sidebar = document.getElementById("sidebar-content");
+
   sidebar.innerHTML = `
     <h2>${restaurant.Name}</h2>
+
     <p><strong>Tipologia:</strong> ${restaurant.Tipologia}</p>
     <p><strong>Orari:</strong> ${restaurant.OpeningAndClosingTime}</p>
     <p>${restaurant.Description}</p>
     <p><em>${restaurant.Location}</em></p>
+
+    <div class="reviews-section">
+      <h3 class="reviews-title">Recensioni recenti</h3>
+
+      <div id="reviews-preview">
+        <p>Caricamento recensioni...</p>
+      </div>
+
+      <button id="openAllReviewsBtn" class="btn reviews-all-btn">
+        Vedi tutte le recensioni
+      </button>
+
+      ${email ? `
+        <div class="review-form">
+          <h3>Lascia una recensione</h3>
+
+          <textarea id="reviewText" rows="3"
+            placeholder="Scrivi la tua recensione..."></textarea>
+
+          <div class="review-form-actions">
+            <select id="reviewConsigliato">
+              <option value="V">Consigliato</option>
+              <option value="F">Non consigliato</option>
+            </select>
+
+            <button id="sendReviewBtn" class="btn">
+              Invia
+            </button>
+          </div>
+
+          <div id="reviewMsg" class="review-msg"></div>
+        </div>
+      ` : `
+        <p class="review-msg">Accedi per lasciare una recensione.</p>
+      `}
+    </div>
   `;
+
+  loadRecentReviews(restaurant.Name); // carica le 3 recensioni più recenti
+
+  document.getElementById("openAllReviewsBtn") // bottone per vedere tutte le recensioni
+    ?.addEventListener("click", () => {
+      window.location.href =
+        `reviews.html?restaurant=${encodeURIComponent(restaurant.Name)}`;
+    });
+
+  document.getElementById("sendReviewBtn") // invio recensione
+    ?.addEventListener("click", async () => {
+      const text = document.getElementById("reviewText")?.value.trim();
+      const cons = document.getElementById("reviewConsigliato")?.value || 'V';
+      const msg = document.getElementById("reviewMsg");
+
+      if (!email) return alert("Devi effettuare il login.");
+      if (!text) return alert("Scrivi una recensione.");
+
+      try {
+        const res = await fetch(`${API_BASE}/reviews/add`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            restaurant: restaurant.Name,
+            review: text,
+            consigliato: cons
+          })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          msg.textContent = data.msg || data.error || "Errore invio recensione";
+          return;
+        }
+
+        document.getElementById("reviewText").value = ""; // reset e ricarica preview
+        msg.textContent = "";
+        loadRecentReviews(restaurant.Name);
+
+      } catch (e) {
+        console.error(e);
+        alert("Errore di rete.");
+      }
+    });
 }
+
+
+
 
 
 // funzione per creare marker
@@ -202,33 +337,3 @@ async function addToRecent(restaurantName) {
 
 
 
-
-
-
-
-
-/* marker di esempio
-
-// marker di esempio per ristorante
-const sampleRestaurant = {
-    name: "Ristorante Demo",
-    lat: 40.856,
-    lng: 14.268,
-    address: "Via Roma 10, Napoli"
-};
-
-// creazione marker
-const marker = L.marker([sampleRestaurant.lat, sampleRestaurant.lng]).addTo(map);
-
-// popup quando clicchi il marker
-marker.bindPopup(`<b>${sampleRestaurant.name}</b><br>${sampleRestaurant.address}`);
-
-// apri dettagli nella sidebar al click
-marker.on('click', () => {
-    document.getElementById("sidebar-content").innerHTML = `
-        <h3>${sampleRestaurant.name}</h3>
-        <p><strong>Indirizzo:</strong> ${sampleRestaurant.address}</p>
-    `;
-});
-
-*/
