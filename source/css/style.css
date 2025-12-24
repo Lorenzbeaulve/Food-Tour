@@ -479,3 +479,29 @@ button:hover { /* mouse hover */
   width: 100%;
   margin-top: 8px;
 }
+.reviews-title-row { 
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+}
+.reviews-percent { 
+font-weight:700; 
+margin-left:1rem; 
+padding:0.25rem 0.5rem; 
+border-radius:4px; 
+}
+.percent-blue { 
+color:#00a6ff; 
+}
+.percent-yellow { 
+color:#e6b800; 
+}
+.percent-red { 
+color:#d93025; 
+}
+.reviews-percent-icon {
+    font-weight:700;
+    margin-left:0.75rem;
+    font-size:1.05rem;
+}
