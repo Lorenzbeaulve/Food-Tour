@@ -11,7 +11,6 @@ async function loadAllReviews() {
   const list = document.getElementById("reviews-list");
   const empty = document.getElementById("reviews-empty");
   const percentEl = document.getElementById("reviews-percent");
-  const iconEl = document.getElementById("reviews-percent-icon");
 
     if (!restaurant) {
     empty.textContent = "Ristorante non specificato.";
@@ -35,28 +34,21 @@ async function loadAllReviews() {
         if (percentEl) {
           percentEl.textContent = `${percent}%`;
           percentEl.classList.remove('percent-blue','percent-yellow','percent-red');
-          if (percent > 59) percentEl.classList.add('percent-blue');
-          else if (percent > 49) percentEl.classList.add('percent-yellow');
-          else percentEl.classList.add('percent-red');
+          if (percent > 59) {percentEl.classList.add('percent-blue');
+            percentEl.textContent = `${percent}%👍`;
+          }
+          else if (percent > 49){ percentEl.classList.add('percent-yellow');
+            percentEl.textContent = `${percent}%~`;
+          }
+          else{ percentEl.classList.add('percent-red');
+            percentEl.textContent = `${percent}%👎`;
+          }
           percentEl.style.display = 'inline-block';
         }
-        if (iconEl) {
-          iconEl.classList.remove('percent-blue','percent-yellow','percent-red');
-          if (percent > 59) {
-            iconEl.textContent = '👍';
-            iconEl.classList.add('percent-blue');
-          } else if (percent > 49) {
-            iconEl.textContent = '~';
-            iconEl.classList.add('percent-yellow');
-          } else {
-            iconEl.textContent = '👎';
-            iconEl.classList.add('percent-red');
-          }
-          iconEl.style.display = 'inline-block';
-        }
+        
       } else {
         if (percentEl) percentEl.style.display = 'none';
-        if (iconEl) iconEl.style.display = 'none';
+       
       }
     } catch (statsErr) {
       console.error('Stats fetch error', statsErr);
