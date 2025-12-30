@@ -106,9 +106,12 @@ function showRestaurantDetails(restaurant) {
 
   const email = getLoggedEmail();
   const sidebar = document.getElementById("sidebar-content");
-
   sidebar.innerHTML = `
     <h2>${restaurant.Name}</h2>
+
+    <div class="restaurant-image-wrap">
+      <img id="restaurantImage" class="restaurant-image" alt="Immagine ${restaurant.Name}">
+    </div>
 
     <p><strong>Tipologia:</strong> ${restaurant.Tipologia}</p>
     <p><strong>Orari:</strong> ${restaurant.OpeningAndClosingTime}</p>
@@ -151,6 +154,24 @@ function showRestaurantDetails(restaurant) {
       `}
     </div>
   `;
+
+  // Imposta l'immagine del ristorante con fallback se non presente
+  const imgEl = document.getElementById("restaurantImage");
+  if (imgEl) {
+    let tried = 0;
+    const setSrc = (ext) => imgEl.src = `assets/ImgResturant/${encodeURIComponent(restaurant.Name)}.${ext}`;
+    imgEl.onerror = function() {
+      if (tried === 0) {
+        tried++;
+        setSrc('png');
+      } else {
+        this.onerror = null;
+        this.src = null; // immagine vuota se nessun formato trovato
+        this.style.display = 'none';
+      }
+    };
+    setSrc('jpg');
+  }
 
   loadRecentReviews(restaurant.Name); // carica le 3 recensioni più recenti
 
