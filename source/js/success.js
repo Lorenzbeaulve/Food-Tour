@@ -16,7 +16,7 @@ map.on('locationfound', (e) => {
 
 // se la posizione non viene trovata (accesso negato o errore)
 map.on('locationerror', () => {
-    alert("Impossibile determinare la posizione.");
+    console.warn("Impossibile ottenere la posizione.");
 });
 
 // aggiungi tile layer (sfondo mappa)
