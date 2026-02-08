@@ -393,6 +393,30 @@ app.post('/reviews/all', async (req, res) => {
   }
 });
 
+// statistiche recensioni: totale e consigliate (Consigliato = 'V')
+app.post('/reviews/stats', async (req, res) => {
+  const { restaurant } = req.body || {};
+  if (!restaurant) return res.status(400).json({ success: false, msg: 'Restaurant richiesto' });
+
+  try {
+    const [rows] = await pool.execute(
+      `SELECT COUNT(*) AS total,
+              SUM(CASE WHEN Consigliato = 'V' THEN 1 ELSE 0 END) AS recommended
+       FROM user_Reviews_A_Restaurant
+       WHERE Restaurant_Name = ?`,
+      [restaurant]
+    );
+
+    const total = rows && rows[0] ? rows[0].total : 0;
+    const recommended = rows && rows[0] ? rows[0].recommended : 0;
+
+    return res.json({ success: true, total, recommended });
+  } catch (err) {
+    console.error('Reviews stats error', err);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // se loggato, aggiungi o aggiorna recensione
 app.post('/reviews/add', async (req, res) => {
   const { email, restaurant, review, consigliato } = req.body || {};

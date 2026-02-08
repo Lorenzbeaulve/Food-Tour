@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script defer src="js/success.js"></script>
-    <script src="js/translate.js"></script>
+    <script src="js/translate.js" defer></script>
 </head>
 
 <body>
@@ -38,24 +38,24 @@
         <!-- SIDEBAR -->
         <aside id="sidebar" class="sidebar">
             <div class="sidebar-header">
-                <h2 id="sidebar-title"></h2>
+                <h2 id="sidebar-title">Dettagli ristorante</h2>
                 <button id="favoriteBtn" class="favorite-btn">
                     <img id="favoriteIcon" src="assets/icons/heart_empty.png" alt="Preferiti">
                 </button>
             </div>
 
             <div id="sidebar-content" class="sidebar-content">
-                <p id="sidebar-message"></p>
+                <p id="sidebar-message">Seleziona un ristorante sulla mappa per visualizzarne le informazioni.</p>
             </div>
         </aside>
     </div>
 
     <!-- FOOTER CONTROLLI MAPPA -->
     <div id="map-footer" class="map-footer">
-        <a id="go-to-profile" class="map-control-btn" href="profile.html"></a>
-        <a id="go-to-favorites" class="map-control-btn" href="favorites.html"></a>
-        <a id="go-to-recent" class="map-control-btn" href="recent.html"></a>
-        <a id="go-to-logout" class="map-control-btn"></a>
+        <a id="go-to-profile" class="map-control-btn" href="profile.html">Profilo</a>
+        <a id="go-to-favorites" class="map-control-btn" href="favorites.html">Preferiti</a>
+        <a id="go-to-recent" class="map-control-btn" href="recent.html">Recenti</a>
+        <a id="go-to-logout" class="map-control-btn" href="index.html">Logout</a>
     </div>
 
 </body>

@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>FoodTour - Recensioni</title>
   <link rel="stylesheet" href="css/style.css" />
-  <script src="js/translate.js"></script>
   <script defer src="js/reviews.js"></script>
+  <script src="js/translate.js" defer></script>
 </head>
 
 <body>
@@ -25,10 +25,13 @@
   </nav>
 
   <div class="favorites-container">
-    <h1 id="reviews-title"></h1>
+    <div class="reviews-title-row">
+      <h1 id="reviews-title">Recensioni</h1>
+        <div id="reviews-percent" class="reviews-percent" style="display:none;"></div>
+    </div>
 
     <div class="favorites-card">
-      <h2 id="reviews-restaurant"></h2>
+      <h2 id="reviews-restaurant">Nessuna recensione.</h2>
 
       <ul id="reviews-list" style="list-style:none; padding:0; margin-top:1.5rem;">
         <li id="reviews-empty"></li>
